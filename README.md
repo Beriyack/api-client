@@ -1,10 +1,10 @@
 # 🚀 API Client
 
-Une bibliothèque PHP orientée objet pour interagir avec des API RESTful. Elle fournit un client HTTP configurable pour simplifier et sécuriser vos requêtes `GET`, `POST`, `PUT`, et `DELETE`.
+Une bibliothèque PHP simple et efficace pour interagir avec des API RESTful. Elle fournit un client HTTP orienté objet et configurable pour simplifier et sécuriser vos requêtes `GET`, `POST`, `PUT`, et `DELETE` en utilisant cURL.
 
 ---
 
-## ✨ Fonctionnalités
+## ✨ Points Forts
 
 *   **Approche Orientée Objet :** Instanciez des clients pour différentes API, chacune avec sa propre configuration.
 *   **Configuration Flexible :** Définissez une URL de base, des en-têtes par défaut (ex: `Authorization`) et des options cURL pour chaque client.
@@ -14,10 +14,10 @@ Une bibliothèque PHP orientée objet pour interagir avec des API RESTful. Elle 
 
 ---
 
-## 🛠️ Installation
+## 🛠️ Prérequis et Installation
 
-Cette bibliothèque est conçue pour être facilement installable via Composer. 
-Elle nécessite les extensions PHP standards comme `cURL`.
+*   PHP 8.0 ou supérieur
+*   L'extension PHP `cURL`
 
 1.  **Exigence :** Assurez-vous d'avoir [Composer](https://getcomposer.org/) installé sur votre système.
 2.  **Ajoutez la dépendance** à votre projet via Composer :
@@ -42,7 +42,7 @@ Elle nécessite les extensions PHP standards comme `cURL`.
 
 ## 📖 Utilisation
 
-### Client simple
+### 1. Client simple (GET)
 
 Créez une instance du client en spécifiant l'URL de base de l'API que vous souhaitez interroger.
 
@@ -53,78 +53,86 @@ try {
     $client = new ApiClient('https://jsonplaceholder.typicode.com');
     
     // Récupérer des données (GET)
-    $data = $client->get('/posts/1');
-    print_r($data);
+    $post = $client->get('/posts/1');
+    print_r($post);
 
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }
 ```
 
-### Créer une ressource (POST)
+### 2. Créer et Mettre à jour des ressources (POST / PUT)
+
+Les méthodes `post()` et `put()` permettent d'envoyer des données, qui seront automatiquement encodées en JSON.
 
 ```php
-use Beriyack\ApiClient;
+use Beriyack\Client\ApiClient;
 
 try {
-    $newPost = [
+    $client = new ApiClient('https://jsonplaceholder.typicode.com');
+
+    // Créer une ressource (POST)
+    $newPostData = [
         'title' => 'Mon Nouveau Titre',
         'body' => 'Contenu de mon nouveau post.',
         'userId' => 1
     ];
-    $response = ApiClient::post('https://jsonplaceholder.typicode.com/posts', $newPost);
+    $createdPost = $client->post('/posts', $newPostData);
+    echo "Post créé :\n";
+    print_r($createdPost);
+
+    // Mettre à jour une ressource (PUT)
+    $updatedPostData = ['title' => 'Titre Mis à Jour'];
+    $updatedPost = $client->put('/posts/1', $updatedPostData);
+    echo "\nPost mis à jour :\n";
+    print_r($updatedPost);
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}
+```
+
+### 3. Supprimer une ressource (DELETE)
+
+```php
+use Beriyack\Client\ApiClient;
+
+try {
+    $client = new ApiClient('https://jsonplaceholder.typicode.com');
+    $response = $client->delete('/posts/1');
+    
+    // Une réponse vide ou un objet vide indique généralement un succès
+    echo "Ressource supprimée avec succès.";
     print_r($response);
+
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }
 ```
 
-### Mettre à jour une ressource (PUT)
+### 4. Client avec authentification et options cURL
+
+Le constructeur vous permet de pré-configurer le client avec des en-têtes (par exemple, pour une clé d'API) et des options cURL qui seront utilisées pour chaque requête.
 
 ```php
-use Beriyack\ApiClient;
+use Beriyack\Client\ApiClient;
 
 try {
-    $updatedPost = [
-        'id' => 1,
-        'title' => 'Titre Mis à Jour',
-        'body' => 'Nouveau contenu pour le post.',
-        'userId' => 1
+    $headers = [
+        'Authorization' => 'Bearer VOTRE_TOKEN_SECRET',
+        'Accept'        => 'application/json',
     ];
-    $response = ApiClient::put('https://jsonplaceholder.typicode.com/posts/1', $updatedPost);
-    print_r($response);
-} catch (Exception $e) {
-    echo "Erreur : " . $e->getMessage();
-}
-```
 
-### Supprimer une ressource (DELETE)
-
-```php
-use Beriyack\ApiClient;
-
-try {
-    $response = ApiClient::delete('https://jsonplaceholder.typicode.com/posts/1');
-    print_r($response); // Souvent vide ou un objet vide pour une suppression réussie
-} catch (Exception $e) {
-    echo "Erreur : " . $e->getMessage();
-}
-```
-
-### Options cURL avancées
-
-Vous pouvez passer un tableau d'options cURL supplémentaires à toutes les méthodes.
-
-```php
-use Beriyack\ApiClient;
-
-try {
-    $options = [
-        CURLOPT_TIMEOUT => 10, // Timeout de 10 secondes
-        CURLOPT_SSL_VERIFYPEER => false // ATTENTION: À utiliser avec précaution et jamais en production sans bonne raison !
+    // Exemple pour un environnement de dev local qui nécessite un certificat spécifique
+    $curlOptions = [
+        CURLOPT_CAINFO => __DIR__ . '/path/to/your/cacert.pem',
+        CURLOPT_TIMEOUT => 15, // Timeout de 15 secondes pour chaque requête
     ];
-    $data = ApiClient::get('https://some-api.com/data', $options);
-    print_r($data);
+
+    $client = new ApiClient('https://api.exemple.com/v2', $headers, $curlOptions);
+
+    // Chaque requête utilisera automatiquement le token et les options cURL
+    $userData = $client->get('/user');
+    print_r($userData);
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }

@@ -39,7 +39,7 @@ class ApiClient
      * @return mixed The decoded JSON response.
      * @throws Exception If the request fails.
      */
-    public function get(string $endpoint, array $queryParams = [], array $headers = [], array $curlOptions = []): mixed
+    public function get(string $endpoint, array $queryParams = [], array $curlOptions = [], array $headers = []): mixed
     {
         $url = $this->buildUrl($endpoint, $queryParams);
         return $this->request('GET', $url, null, $headers, $curlOptions);
@@ -55,7 +55,7 @@ class ApiClient
      * @return mixed The decoded JSON response.
      * @throws Exception If the request fails.
      */
-    public function post(string $endpoint, mixed $data = null, array $headers = [], array $curlOptions = []): mixed
+    public function post(string $endpoint, mixed $data = null, array $curlOptions = [], array $headers = []): mixed
     {
         $url = $this->buildUrl($endpoint);
         return $this->request('POST', $url, $data, $headers, $curlOptions);
@@ -71,7 +71,7 @@ class ApiClient
      * @return mixed The decoded JSON response.
      * @throws Exception If the request fails.
      */
-    public function put(string $endpoint, mixed $data = null, array $headers = [], array $curlOptions = []): mixed
+    public function put(string $endpoint, mixed $data = null, array $curlOptions = [], array $headers = []): mixed
     {
         $url = $this->buildUrl($endpoint);
         return $this->request('PUT', $url, $data, $headers, $curlOptions);
@@ -86,7 +86,7 @@ class ApiClient
      * @return mixed The decoded JSON response.
      * @throws Exception If the request fails.
      */
-    public function delete(string $endpoint, array $headers = [], array $curlOptions = []): mixed
+    public function delete(string $endpoint, array $curlOptions = [], array $headers = []): mixed
     {
         $url = $this->buildUrl($endpoint);
         return $this->request('DELETE', $url, null, $headers, $curlOptions);
