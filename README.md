@@ -1,16 +1,16 @@
 # 🚀 API Client
 
-Une bibliothèque PHP simple et efficace pour interagir avec des API RESTful, conçue pour simplifier vos requêtes HTTP (GET, POST, PUT, DELETE). Idéale pour les développeurs PHP qui ont besoin d'une solution rapide et robuste pour leurs intégrations d'API.
+Une bibliothèque PHP orientée objet pour interagir avec des API RESTful. Elle fournit un client HTTP configurable pour simplifier et sécuriser vos requêtes `GET`, `POST`, `PUT`, et `DELETE`.
 
 ---
 
 ## ✨ Fonctionnalités
 
-* **Opérations CRUD Complètes**: Supporte les méthodes HTTP `GET`, `POST`, `PUT`, et `DELETE`.
-* **Gestion des Requêtes**: Gère l'encodage des données JSON et les en-têtes `Content-Type`.
-* **Options cURL Personnalisables**: Permet de passer des options cURL supplémentaires pour une flexibilité maximale (gestion des certificats SSL, timeouts, etc.).
-* **Gestion des Erreurs**: Inclut une gestion robuste des erreurs cURL et des codes de statut HTTP pour des retours clairs.
-* **Facile à Utiliser**: Une API statique simple pour des appels de fonction directs.
+*   **Approche Orientée Objet :** Instanciez des clients pour différentes API, chacune avec sa propre configuration.
+*   **Configuration Flexible :** Définissez une URL de base, des en-têtes par défaut (ex: `Authorization`) et des options cURL pour chaque client.
+*   **Opérations CRUD Complètes :** Supporte les méthodes HTTP `GET`, `POST`, `PUT`, et `DELETE`.
+*   **Gestion Automatique :** Gère l'encodage des données JSON et les en-têtes `Content-Type`.
+*   **Gestion Robuste des Erreurs :** Lance des exceptions claires en cas d'erreur cURL ou de code de statut HTTP invalide.
 
 ---
 
@@ -23,7 +23,7 @@ Elle nécessite les extensions PHP standards comme `cURL`.
 2.  **Ajoutez la dépendance** à votre projet via Composer :
 
     ```bash
-    composer require beriyack/apiclient
+    composer require beriyack/api-client
     ```
 
     Cela installera la librairie dans votre dossier `vendor/` et mettra à jour l'autoloader de Composer.
@@ -34,7 +34,7 @@ Elle nécessite les extensions PHP standards comme `cURL`.
     <?php
     require_once 'vendor/autoload.php';
 
-    use Beriyack\ApiClient;
+    use Beriyack\Client\ApiClient;
     ?>
     ```
 
@@ -42,16 +42,20 @@ Elle nécessite les extensions PHP standards comme `cURL`.
 
 ## 📖 Utilisation
 
-Toutes les méthodes de la classe `ApiClient` sont statiques pour chaque type de requête HTTP, ce qui les rend faciles à appeler directement.
+### Client simple
 
-### Récupérer des données (GET)
+Créez une instance du client en spécifiant l'URL de base de l'API que vous souhaitez interroger.
 
 ```php
-use Beriyack\ApiClient;
+use Beriyack\Client\ApiClient;
 
 try {
-    $data = ApiClient::get('https://jsonplaceholder.typicode.com/posts/1');
+    $client = new ApiClient('https://jsonplaceholder.typicode.com');
+    
+    // Récupérer des données (GET)
+    $data = $client->get('/posts/1');
     print_r($data);
+
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }

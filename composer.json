@@ -1,18 +1,24 @@
 {
     "name": "beriyack/api-client",
-    "description": "Une bibliothèque PHP simple et efficace pour interagir avec des API RESTful, conçue pour simplifier vos requêtes HTTP (GET, POST, PUT, DELETE).",
+    "description": "Une bibliothèque PHP orientée objet pour interagir avec des API RESTful.",
     "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Beriyack\\": "src/Beriyack/"
-        }
-    },
     "authors": [
         {
-            "name": "Beriyack"
+            "name": "Beriyack",
+            "homepage": "https://github.com/Beriyack"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Beriyack\\Client\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Beriyack\\Client\\Tests\\": "tests/"
+        }
+    },
     "keywords": [
         "php",
         "api",
@@ -20,13 +26,13 @@
         "http",
         "rest",
         "curl",
-        "request",
-        "crud",
-        "web-service",
-        "connector"
+        "crud"
     ],
     "require": {
         "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
     },
     "minimum-stability": "stable",
     "prefer-stable": true
