@@ -22,21 +22,21 @@ Une bibliothèque PHP simple et efficace pour interagir avec des API RESTful. El
 1.  **Exigence :** Assurez-vous d'avoir [Composer](https://getcomposer.org/) installé sur votre système.
 2.  **Ajoutez la dépendance** à votre projet via Composer :
 
-    ```bash
-    composer require beriyack/api-client
-    ```
+```bash
+composer require beriyack/api-client
+```
 
-    Cela installera la librairie dans votre dossier `vendor/` et mettra à jour l'autoloader de Composer.
+Cela installera la librairie dans votre dossier `vendor/` et mettra à jour l'autoloader de Composer.
 
 3.  **Utilisez l'autoloader de Composer** dans votre projet :
 
-    ```php
-    <?php
-    require_once 'vendor/autoload.php';
+```php
+<?php
+require_once 'vendor/autoload.php';
 
-    use Beriyack\Client\ApiClient;
-    ?>
-    ```
+use Beriyack\Client\ApiClient;
+?>
+```
 
 ---
 
@@ -136,6 +136,34 @@ try {
 } catch (Exception $e) {
     echo "Erreur : " . $e->getMessage();
 }
+```
+
+### 5. Envoyer des données avec un Content-Type spécifique
+
+Par défaut, le client envoie les données des requêtes `POST` et `PUT` au format `application/json`. Cependant, vous pouvez spécifier un autre `Content-Type` (comme `application/x-www-form-urlencoded` pour l'authentification OAuth) en le passant dans les en-têtes. Le client encodera automatiquement les données dans le bon format.
+```php
+use Beriyack\Client\ApiClient;
+
+try {
+    // Ce client est utilisé pour obtenir un token OAuth
+    $authClient = new ApiClient('https://oauth.service.com');
+
+    $data = [
+        'grant_type'    => 'client_credentials',
+        'client_id'     => 'YOUR_CLIENT_ID',
+        'client_secret' => 'YOUR_CLIENT_SECRET'
+    ];
+
+    $headers = [
+        'Content-Type' => 'application/x-www-form-urlencoded'
+    ];
+
+    $tokenResponse = $authClient->post('/token', $data, [], $headers);
+    print_r($tokenResponse);
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}
+
 ```
 
 ---
