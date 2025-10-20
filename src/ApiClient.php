@@ -9,7 +9,6 @@ use Exception;
  *
  * @package Beriyack\Client
  * @author Beriyack
- * @version 2.0.0
  */
 class ApiClient
 {
@@ -121,11 +120,31 @@ class ApiClient
         $options[CURLOPT_HTTPHEADER] = $httpHeaders;
 
         if ($data !== null) {
-            $encodedData = json_encode($data);
-            $options[CURLOPT_POSTFIELDS] = $encodedData;
-            // Ensure Content-Type is set for POST/PUT/PATCH
-            if (!isset($finalHeaders['Content-Type'])) {
-                $options[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+            // Détecter le Content-Type pour encoder les données correctement
+            $contentType = 'application/json'; // Par défaut
+            foreach ($finalHeaders as $key => $value) {
+                if (strtolower($key) === 'content-type') {
+                    $contentType = $value;
+                    break;
+                }
+            }
+
+            if (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
+                $options[CURLOPT_POSTFIELDS] = http_build_query($data);
+            } else {
+                // Comportement par défaut : JSON
+                $options[CURLOPT_POSTFIELDS] = json_encode($data);
+                // S'assurer que l'en-tête JSON est présent s'il n'a pas été défini manuellement
+                $contentTypeHeaderFound = false;
+                foreach ($finalHeaders as $key => $value) {
+                    if (strtolower($key) === 'content-type') {
+                        $contentTypeHeaderFound = true;
+                        break;
+                    }
+                }
+                if (!$contentTypeHeaderFound) {
+                    $options[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+                }
             }
         }
 
