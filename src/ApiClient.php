@@ -9,6 +9,7 @@ use Exception;
  *
  * @package Beriyack\Client
  * @author Beriyack
+ * @version 3.1.0
  */
 class ApiClient
 {
