@@ -176,7 +176,7 @@ Les contributions sont les bienvenues \! Si vous avez des idées d'amélioration
 
 ## 📄 Licence
 
-Ce projet est sous licence MIT - voir le fichier [LICENSE](https://www.google.com/search?q=LICENSE) pour plus de détails.
+Ce projet est sous licence MIT - voir le fichier `LICENSE` pour plus de détails.
 
 -----
 
